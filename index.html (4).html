@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الأهلي للتسويق الإلكتروني – باقات التسويق الرقمي</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --orange:#f15a25; --pink:#ec2159;
+  --grad:linear-gradient(135deg,#f15a25 0%,#ec2159 100%);
+  --grad-soft:linear-gradient(135deg,rgba(241,90,37,.08),rgba(236,33,89,.08));
+  --bg:#080808; --bg2:#111111; --bg3:#1a1a1a;
+  --card:#111111; --card2:#1a1a1a;
+  --border:rgba(241,90,37,.18); --border-s:rgba(255,255,255,.07);
+  --text:#ffffff; --muted:rgba(255,255,255,.5); --dim:rgba(255,255,255,.2);
+  --inp:rgba(255,255,255,.05); --inp-b:rgba(255,255,255,.1);
+  --modal:#111111; --overlay:rgba(0,0,0,.85);
+  --chip:rgba(255,255,255,.04); --chip-b:rgba(255,255,255,.08);
+  --result:rgba(255,255,255,.9);
+  --glow1:rgba(241,90,37,.18); --glow2:rgba(236,33,89,.18);
+}
+body.light {
+  --bg:#f5f4f2; --bg2:#ffffff; --bg3:#edebea;
+  --card:#ffffff; --card2:#faf9f7;
+  --border:rgba(241,90,37,.22); --border-s:rgba(0,0,0,.07);
+  --text:#1a1a1a; --muted:rgba(0,0,0,.45); --dim:rgba(0,0,0,.18);
+  --inp:rgba(0,0,0,.04); --inp-b:rgba(0,0,0,.12);
+  --modal:#ffffff; --overlay:rgba(0,0,0,.6);
+  --chip:rgba(241,90,37,.05); --chip-b:rgba(241,90,37,.15);
+  --result:#1a1a1a;
+  --glow1:rgba(241,90,37,.07); --glow2:rgba(236,33,89,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'IBM Plex Sans Arabic',sans-serif;
+  background:var(--bg); color:var(--text);
+  min-height:100vh; overflow-x:hidden;
+  transition:background .3s,color .3s;
+}
+body::before{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% -10%, var(--glow1) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 110%, var(--glow2) 0%,transparent 60%);
+  transition:background .3s;
+}
+
+/* ── THEME TOGGLE ── */
+.theme-toggle{
+  position:fixed; top:18px; left:18px; z-index:500;
+  display:flex; align-items:center; gap:8px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:30px; padding:8px 14px; cursor:pointer;
+  font-size:12px; font-family:'IBM Plex Sans Arabic',sans-serif;
+  color:var(--muted); transition:all .25s;
+  box-shadow:0 2px 16px rgba(0,0,0,.2);
+}
+.theme-toggle:hover{border-color:var(--orange);color:var(--text);}
+.theme-toggle .tt-track{
+  width:36px; height:20px; border-radius:10px;
+  background:var(--bg3); border:1px solid var(--border);
+  position:relative; transition:background .3s;
+}
+.theme-toggle .tt-knob{
+  position:absolute; top:2px; right:2px;
+  width:14px; height:14px; border-radius:50%;
+  background:var(--grad); transition:right .3s;
+  box-shadow:0 0 6px rgba(241,90,37,.5);
+}
+body.light .tt-knob{right:18px;}
+
+/* ── HEADER ── */
+.site-header{
+  position:relative; z-index:10; text-align:center; padding:56px 20px 32px;
+}
+.logo-mark{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:68px; height:68px; border-radius:20px; background:var(--grad);
+  font-size:24px; font-weight:700; color:#fff;
+  margin-bottom:18px;
+  box-shadow:0 0 36px rgba(241,90,37,.5),0 0 72px rgba(236,33,89,.3);
+  animation:pglow 3s ease-in-out infinite;
+}
+@keyframes pglow{
+  0%,100%{box-shadow:0 0 36px rgba(241,90,37,.5),0 0 72px rgba(236,33,89,.3);}
+  50%{box-shadow:0 0 56px rgba(241,90,37,.8),0 0 110px rgba(236,33,89,.5);}
+}
+.site-header h1{
+  font-size:clamp(22px,4vw,44px); font-weight:700;
+  background:var(--grad); -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent; background-clip:text;
+  line-height:1.2; margin-bottom:8px;
+}
+.site-header .tagline{color:var(--muted);font-size:14px;font-weight:300;}
+.site-header .co-url{
+  display:inline-block; margin-top:8px; color:var(--muted);
+  font-size:12px; border:1px solid var(--border); border-radius:20px; padding:3px 12px;
+}
+
+/* ── NAV DOTS ── */
+.pkg-nav{
+  position:fixed; right:18px; top:50%; transform:translateY(-50%);
+  z-index:100; display:flex; flex-direction:column; gap:9px;
+}
+.pkg-nav-dot{
+  width:7px; height:7px; border-radius:50%; background:var(--dim);
+  cursor:pointer; transition:all .3s; border:none; padding:0;
+}
+.pkg-nav-dot.active,.pkg-nav-dot:hover{
+  background:var(--orange); transform:scale(1.6);
+  box-shadow:0 0 8px rgba(241,90,37,.8);
+}
+
+/* ── MAIN ── */
+.main{position:relative;z-index:5;max-width:1080px;margin:0 auto;padding:0 18px 80px;}
+
+/* ── PACKAGE SECTION ── */
+.pkg-section{
+  margin-bottom:18px; border-radius:24px;
+  background:var(--card); border:1px solid var(--border);
+  overflow:hidden; transition:border-color .3s,box-shadow .3s,background .3s;
+  position:relative;
+}
+.pkg-section::before{
+  content:''; position:absolute; inset:0; border-radius:24px;
+  background:var(--grad-soft); opacity:0; transition:opacity .3s; pointer-events:none;
+}
+.pkg-section:hover{border-color:rgba(241,90,37,.45);box-shadow:0 6px 48px rgba(241,90,37,.1);}
+.pkg-section:hover::before{opacity:1;}
+
+.pkg-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:26px 30px; cursor:pointer; flex-wrap:wrap; gap:12px;
+}
+.pkg-header-right{display:flex;align-items:center;gap:16px;}
+.pkg-badge{
+  width:50px;height:50px;border-radius:14px;background:var(--grad);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;box-shadow:0 4px 16px rgba(241,90,37,.4);
+}
+.pkg-name{font-size:19px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.pkg-dur{font-size:12px;color:var(--muted);}
+.pkg-pricing{text-align:start;}
+.pkg-price-new{
+  font-size:24px;font-weight:700;
+  background:var(--grad);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+}
+.pkg-price-old{font-size:12px;color:var(--muted);text-decoration:line-through;direction:ltr;}
+.pkg-save{
+  display:inline-block;background:rgba(241,90,37,.1);
+  border:1px solid rgba(241,90,37,.25);color:var(--orange);
+  font-size:10px;font-weight:600;padding:2px 9px;border-radius:20px;margin-top:3px;
+}
+.pkg-arrow{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;color:var(--muted);font-size:12px;flex-shrink:0;
+}
+.pkg-section.open .pkg-arrow{background:var(--grad);border-color:transparent;color:#fff;transform:rotate(180deg);}
+
+.pkg-services{display:none;padding:0 30px 26px;animation:fs .3s ease;}
+.pkg-section.open .pkg-services{display:block;}
+@keyframes fs{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+.divider{
+  height:1px;margin-bottom:16px;
+  background:linear-gradient(90deg,transparent,rgba(241,90,37,.25),rgba(236,33,89,.25),transparent);
+}
+.services-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;margin-bottom:14px;
+}
+.service-chip{
+  display:flex;align-items:center;gap:9px;padding:12px 15px;
+  border-radius:12px;background:var(--chip);border:1px solid var(--chip-b);
+  cursor:pointer;transition:all .22s;font-size:13px;font-weight:500;color:var(--text);
+}
+.service-chip:hover{
+  background:rgba(241,90,37,.1);border-color:rgba(241,90,37,.35);
+  transform:translateY(-2px);box-shadow:0 4px 16px rgba(241,90,37,.1);
+}
+.chip-icon{
+  width:28px;height:28px;border-radius:7px;background:var(--grad);
+  display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;
+}
+.chip-arr{margin-right:auto;color:var(--muted);font-size:10px;transition:color .2s;}
+.service-chip:hover .chip-arr{color:var(--orange);}
+
+.pkg-result{
+  padding:13px 16px;border-radius:11px;
+  background:linear-gradient(135deg,rgba(241,90,37,.09),rgba(236,33,89,.09));
+  border:1px solid rgba(241,90,37,.18);font-size:13px;font-weight:500;color:var(--result);
+}
+.print-btn{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 20px;
+  border-radius:11px;background:var(--grad);border:none;color:#fff;
+  font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .25s;margin-top:13px;
+  box-shadow:0 4px 16px rgba(241,90,37,.35);
+}
+.print-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(241,90,37,.5);}
+
+/* ── SERVICE MODAL ── */
+.modal-ov{
+  position:fixed;inset:0;background:var(--overlay);z-index:1000;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(8px);
+}
+.modal-ov.open{display:flex;}
+.modal-box{
+  background:var(--modal);border:1px solid rgba(241,90,37,.28);border-radius:24px;
+  padding:36px;max-width:520px;width:100%;max-height:85vh;overflow-y:auto;
+  position:relative;box-shadow:0 0 60px rgba(241,90,37,.16);animation:mi .3s ease;
+}
+@keyframes mi{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.modal-close{
+  position:absolute;top:16px;left:16px;width:32px;height:32px;
+  border-radius:50%;border:1px solid var(--border);background:none;
+  color:var(--muted);cursor:pointer;font-size:15px;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.modal-close:hover{background:rgba(241,90,37,.1);color:var(--orange);}
+.modal-title{
+  font-size:19px;font-weight:700;margin-bottom:4px;
+  background:var(--grad);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:22px;}
+.det-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.det-list li{
+  display:flex;align-items:flex-start;gap:11px;
+  font-size:14px;line-height:1.65;color:var(--text);
+}
+.det-list li::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--grad);margin-top:7px;flex-shrink:0;
+}
+
+/* ── PDF MODAL ── */
+.pdf-ov{
+  position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(12px);
+}
+.pdf-ov.open{display:flex;}
+.pdf-box{
+  background:var(--modal);border:1px solid rgba(241,90,37,.32);border-radius:24px;
+  padding:38px;max-width:520px;width:100%;max-height:92vh;overflow-y:auto;
+  box-shadow:0 0 80px rgba(241,90,37,.2);animation:mi .3s ease;
+}
+.pdf-box h2{
+  font-size:19px;font-weight:700;margin-bottom:4px;
+  background:var(--grad);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+}
+.pdf-desc{color:var(--muted);font-size:13px;margin-bottom:22px;line-height:1.6;}
+.pdf-sec{
+  font-size:10px;font-weight:700;color:var(--orange);
+  text-transform:uppercase;letter-spacing:1px;
+  margin:18px 0 10px;padding-bottom:6px;
+  border-bottom:1px solid rgba(241,90,37,.14);
+}
+.pdf-f{margin-bottom:12px;}
+.pdf-f label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;letter-spacing:.4px;}
+.pdf-f input{
+  width:100%;padding:12px 14px;border-radius:10px;
+  background:var(--inp);border:1px solid var(--inp-b);
+  color:var(--text);font-family:'IBM Plex Sans Arabic',sans-serif;
+  font-size:14px;outline:none;transition:border-color .2s,background .2s;
+}
+.pdf-f input:focus{border-color:rgba(241,90,37,.45);background:rgba(241,90,37,.04);}
+.pdf-btns{display:flex;gap:10px;margin-top:20px;}
+.btn-cancel{
+  flex:1;padding:12px;border-radius:10px;
+  background:var(--inp);border:1px solid var(--inp-b);
+  color:var(--muted);font-family:'IBM Plex Sans Arabic',sans-serif;
+  font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;
+}
+.btn-cancel:hover{background:var(--chip);color:var(--text);}
+.btn-gen{
+  flex:2;padding:12px;border-radius:10px;background:var(--grad);border:none;
+  color:#fff;font-family:'IBM Plex Sans Arabic',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;transition:all .25s;
+  box-shadow:0 4px 16px rgba(241,90,37,.35);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-gen:hover:not(:disabled){box-shadow:0 8px 26px rgba(241,90,37,.5);transform:translateY(-1px);}
+.btn-gen:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+.spinner{
+  display:none;width:15px;height:15px;
+  border:2px solid rgba(255,255,255,.3);border-top-color:#fff;
+  border-radius:50%;animation:spin .7s linear infinite;
+}
+.btn-gen.loading .spinner{display:block;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── SCROLL HINT ── */
+.scroll-hint{
+  text-align:center;color:var(--muted);font-size:13px;
+  margin-bottom:22px;animation:bounce 2s ease-in-out infinite;
+}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+@media(max-width:600px){
+  .pkg-header{padding:18px 16px;}
+  .pkg-services{padding:0 16px 20px;}
+  .services-grid{grid-template-columns:1fr 1fr;}
+  .pkg-nav{display:none;}
+  .theme-toggle .tt-label{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- THEME TOGGLE -->
+<button class="theme-toggle" onclick="toggleTheme()">
+  <span class="tt-track"><span class="tt-knob"></span></span>
+  <span class="tt-label" id="themeLabel">وضع النهار</span>
+</button>
+
+<!-- NAV DOTS -->
+<nav class="pkg-nav" id="pkgNav"></nav>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo-mark">ا</div>
+  <h1>الأهلي للتسويق الإلكتروني</h1>
+  <p class="tagline">باقات التسويق الرقمي الاحترافية</p>
+  <span class="co-url">www.al-ahlyagency.com</span>
+</header>
+
+<div class="main" id="mainContent">
+  <p class="scroll-hint">▼ اضغط على أي باقة لعرض تفاصيلها</p>
+</div>
+
+<!-- SERVICE MODAL -->
+<div class="modal-ov" id="serviceModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-sub" id="modalSub"></div>
+    <ul class="det-list" id="modalList"></ul>
+  </div>
+</div>
+
+<!-- PDF MODAL -->
+<div class="pdf-ov" id="pdfModal">
+  <div class="pdf-box">
+    <h2>تصدير عرض السعر PDF</h2>
+    <p class="pdf-desc">أدخل بيانات العميل ومطور الأعمال لتوليد عرض سعر احترافي جاهز للإرسال</p>
+
+    <div class="pdf-sec">بيانات العميل</div>
+    <div class="pdf-f"><label>اسم العميل *</label>
+      <input id="clientName" type="text" placeholder="مثال: محمد العمري"/></div>
+    <div class="pdf-f"><label>اسم الشركة / المشروع</label>
+      <input id="clientCompany" type="text" placeholder="مثال: شركة النجاح للتجارة"/></div>
+    <div class="pdf-f"><label>التاريخ</label>
+      <input id="clientDate" type="text" placeholder="مثال: 28 فبراير 2026"/></div>
+
+    <div class="pdf-sec">بيانات مطور الأعمال — الأهلي</div>
+    <div class="pdf-f"><label>الاسم</label>
+      <input id="salesName" type="text" placeholder="مثال: أحمد السالم"/></div>
+    <div class="pdf-f"><label>رقم الجوال</label>
+      <input id="salesPhone" type="text" placeholder="مثال: 0512345678"/></div>
+    <div class="pdf-f"><label>البريد الإلكتروني</label>
+      <input id="salesEmail" type="text" placeholder="مثال: ahmed@al-ahlyagency.com"/></div>
+
+    <div class="pdf-btns">
+      <button class="btn-cancel" onclick="closePdfModal()">إلغاء</button>
+      <button class="btn-gen" id="genBtn" onclick="generatePDF()">
+        <span class="spinner"></span>
+        <span class="btn-label">توليد PDF</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════ THEME ══════════════════
+let isDark = true;
+function toggleTheme(){
+  isDark = !isDark;
+  document.body.classList.toggle('light', !isDark);
+  document.getElementById('themeLabel').textContent = isDark ? 'وضع النهار' : 'وضع الليل';
+}
+
+// ══════════════════ DATA ══════════════════
+const SERVICES = {
+  social:{icon:"📱",name:"Social Media Management",subtitle:"إدارة منصات التواصل الاجتماعي",details:[
+    "تصميم ونشر محتوى بصري ونصي جذاب يعكس هوية العلامة التجارية",
+    "التخطيط الاستراتيجي وجدولة المنشورات بشكل منتظم ومدروس",
+    "إدارة الرسائل والتعليقات والتفاعل مع الجمهور في الوقت المناسب",
+    "تحليل الأداء وتقديم تقارير شهرية مفصلة بالأرقام والمؤشرات",
+    "بناء مجتمع متفاعل حول العلامة التجارية عبر المنصات المختلفة",
+    "تطوير استراتيجية محتوى تتناسب مع جمهورك المستهدف",
+    "إنشاء تقويم محتوى شهري منسجم مع المناسبات والمواسم"
+  ]},
+  media:{icon:"🎯",name:"Media Buying",subtitle:"إدارة الحملات الإعلانية المدفوعة",details:[
+    "تخطيط الحملات الإعلانية وتحديد الأهداف القابلة للقياس",
+    "تحديد الجمهور المستهدف بدقة عالية باستخدام أدوات الاستهداف المتقدمة",
+    "تصميم إعلانات بصرية ونصية جذابة وفعّالة لتحقيق أعلى تفاعل",
+    "إدارة الميزانية الإعلانية بكفاءة لتحقيق أفضل عائد على الاستثمار (ROI)",
+    "متابعة الأداء اليومي والتحسين المستمر للحملات القائمة",
+    "اختبار A/B للإعلانات لاختيار الأنسب وتحقيق نتائج أفضل",
+    "تقارير تفصيلية دورية عن أداء الحملات وتوصيات للتطوير"
+  ]},
+  seo:{icon:"🔍",name:"SEO",subtitle:"تحسين محركات البحث",details:[
+    "تحليل الكلمات المفتاحية الأكثر فاعلية في مجال عملك",
+    "تحسين المحتوى النصي والوصفي ليتوافق مع معايير محركات البحث",
+    "تحسين البنية التقنية للموقع (سرعة التحميل، الروابط، الخرائط)",
+    "بناء روابط خارجية آمنة وعالية الجودة من مصادر موثوقة",
+    "تحسين الموقع للظهور في نتائج البحث المحلي",
+    "تقارير دورية عن الترتيب في محركات البحث ومعدل الزيارات",
+    "متابعة التحديثات الخوارزمية لجوجل والتكيف معها فورياً"
+  ]},
+  web:{icon:"💻",name:"Website Management",subtitle:"إدارة وتطوير الموقع الإلكتروني",details:[
+    "تحسين تجربة المستخدم (UX) لجعل الموقع سهل التصفح والاستخدام",
+    "تطوير الواجهة البصرية (UI) لتعكس هوية العلامة التجارية باحترافية",
+    "ضمان توافق الموقع مع جميع الأجهزة (موبايل، تابلت، كمبيوتر)",
+    "تحديث المحتوى والصور والمنتجات بشكل منتظم ودقيق",
+    "متابعة أداء الموقع وحل المشكلات التقنية فور ظهورها",
+    "النسخ الاحتياطي الدوري وحماية الموقع من الاختراقات",
+    "تحليل سلوك الزوار وتقديم توصيات لتحسين رحلة المستخدم"
+  ]},
+  cro:{icon:"📈",name:"CRO",subtitle:"تحسين معدل التحويل",details:[
+    "تحليل سلوك الزوار داخل الموقع باستخدام خرائط الحرارة والتسجيلات",
+    "تحديد نقاط الضعف في مسار التحويل وتقديم حلول فعّالة",
+    "اختبار A/B للصفحات والعناصر للوصول إلى أفضل أداء",
+    "تحسين صفحات الهبوط (Landing Pages) لتحقيق أعلى معدل تحويل",
+    "تحسين عملية الشراء والدفع لتقليل معدل التخلي عن السلة",
+    "تحليل مسار العميل من الزيارة حتى الشراء وتحسين كل خطوة",
+    "رفع نسبة التحويل من زوار إلى عملاء فعليين بطريقة مثبتة"
+  ]},
+  payment:{icon:"💳",name:"Payment Gateways",subtitle:"تفعيل وإعداد بوابات الدفع",details:[
+    "تفعيل وربط بوابة مدى (بطاقات البنوك السعودية)",
+    "إعداد وتفعيل STC Pay للدفع السريع عبر الجوال",
+    "ربط Apple Pay لتجربة دفع سلسة على أجهزة Apple",
+    "تفعيل PayPal لاستقبال المدفوعات الدولية",
+    "إعداد Visa و MasterCard لقبول البطاقات العالمية",
+    "ضبط إعدادات الدفع والتأكد من عمل كل البوابات بكفاءة",
+    "تأمين الموقع بشهادة SSL وضمان الامتثال لمعايير PCI"
+  ]},
+  branding:{icon:"✨",name:"Visual Identity & Branding",subtitle:"بناء هوية بصرية متكاملة",details:[
+    "تصميم الشعار بثلاث نسخ: رمزي، نصي، ومختصر",
+    "اختيار نظام الألوان المناسب الذي يعكس قيم العلامة التجارية",
+    "تحديد الخطوط (Typography) وإرشادات استخدامها",
+    "تصميم Moodboard يجسّد هوية العلامة وأسلوبها البصري",
+    "إعداد Brand Guidelines دليل متكامل لاستخدام الهوية",
+    "تحليل السوق والمنافسين لتحديد مكانة مميزة",
+    "صياغة الرؤية والرسالة والقيم الجوهرية للعلامة",
+    "تحديد Voice & Tone صوت العلامة وأسلوب التواصل",
+    "استراتيجية التمركز (Positioning) في السوق",
+    "تصميم المطبوعات: بطاقات عمل، أوراق رسمية، أظرف",
+    "Brand Storytelling صياغة قصة العلامة التجارية",
+    "تصميم تجربة العميل عبر نقاط التواصل المختلفة",
+    "تصميم التغليف (Packaging) إن وجد"
+  ]}
+};
+
+const PACKAGES=[
+  {id:"launch",icon:"🚀",name:"باقة الانطلاقة",price:"2,850",old:"3,400",dur:"30 يوم",result:"زيادة المبيعات – رفع الوعي – نتائج قابلة للقياس بأقل تكلفة",svcs:["social","media","seo","web","cro"]},
+  {id:"profit",icon:"💰",name:"باقة الربح",price:"5,300",old:"6,800",dur:"شهر فل باكدج – شهرين ميديا",result:"تركيز أكبر على بناء حضور قوي وتحقيق مبيعات مستقرة",svcs:["social","media","seo","web","cro"]},
+  {id:"top",icon:"👑",name:"باقة القمة",price:"6,900",old:"10,100",dur:"90 يوم – جميع الخدمات",result:"مثالية للشركات اللي تبغى نتائج واضحة خلال ربع سنة",svcs:["social","media","seo","web","cro"]},
+  {id:"excellence",icon:"⭐",name:"باقة التميز",price:"12,800",old:"19,400",dur:"180 يوم",result:"مناسبة للعلامات التجارية اللي تبغى توسع حصتها السوقية",svcs:["social","media","seo","web","cro"]},
+  {id:"elite",icon:"💎",name:"باقة النخبة",price:"22,000",old:"25,200",dur:"360 يوم",result:"بناء علامة تجارية قوية ومستقرة على مدار العام",svcs:["social","media","seo","web","cro"]},
+  {id:"brand",icon:"🎨",name:"باقة الهوية البصرية",price:"2,000",old:"3,500",dur:"خدمة متكاملة",result:"هوية بصرية احترافية تميزك في السوق",svcs:["branding"]},
+  {id:"webpkg",icon:"🌐",name:"باقة تحسين الموقع",price:"1,800",old:"2,200",dur:"خدمة متكاملة",result:"موقع سريع آمن ومحوّل مع بوابات دفع متكاملة",svcs:["web","cro","payment"]}
+];
+
+function savingAmt(p){ return (parseInt(p.old.replace(/,/g,''))-parseInt(p.price.replace(/,/g,''))).toLocaleString(); }
+
+// ══════════════════ RENDER ══════════════════
+let activePkg=null;
+
+function renderPackages(){
+  const cont=document.getElementById('mainContent');
+  const nav=document.getElementById('pkgNav');
+  PACKAGES.forEach((p,i)=>{
+    const dot=document.createElement('button');
+    dot.className='pkg-nav-dot'; dot.title=p.name;
+    dot.onclick=()=>document.getElementById('pkg-'+p.id).scrollIntoView({behavior:'smooth',block:'center'});
+    nav.appendChild(dot);
+
+    const sec=document.createElement('div');
+    sec.className='pkg-section'; sec.id='pkg-'+p.id;
+    sec.innerHTML=`
+      <div class="pkg-header" onclick="togglePkg('${p.id}')">
+        <div class="pkg-header-right">
+          <div class="pkg-badge">${p.icon}</div>
+          <div><div class="pkg-name">${p.name}</div><div class="pkg-dur">📅 ${p.dur}</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <div class="pkg-pricing">
+            <div class="pkg-price-new">${p.price} ريال</div>
+            <div class="pkg-price-old">${p.old} ريال</div>
+            <div class="pkg-save">وفّر ${savingAmt(p)} ريال</div>
+          </div>
+          <div class="pkg-arrow">▼</div>
+        </div>
+      </div>
+      <div class="pkg-services" id="s-${p.id}">
+        <div class="divider"></div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">اضغط على أي خدمة لعرض تفاصيلها</div>
+        <div class="services-grid">
+          ${p.svcs.map(s=>`<div class="service-chip" onclick="openModal('${s}')">
+            <div class="chip-icon">${SERVICES[s].icon}</div>
+            <span>${SERVICES[s].name}</span>
+            <span class="chip-arr">◄</span>
+          </div>`).join('')}
+        </div>
+        <div class="pkg-result">🎯 ${p.result}</div>
+        <button class="print-btn" onclick="openPdfModal('${p.id}')">📄 تصدير عرض السعر PDF</button>
+      </div>`;
+    cont.appendChild(sec);
+  });
+
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        const idx=PACKAGES.findIndex(p=>p.id===e.target.id.replace('pkg-',''));
+        document.querySelectorAll('.pkg-nav-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+      }
+    });
+  },{threshold:0.4});
+  PACKAGES.forEach(p=>{const el=document.getElementById('pkg-'+p.id);if(el)obs.observe(el);});
+}
+
+function togglePkg(id){ document.getElementById('pkg-'+id).classList.toggle('open'); }
+
+// ══════════════════ SERVICE MODAL ══════════════════
+function openModal(key){
+  event.stopPropagation();
+  const s=SERVICES[key];
+  document.getElementById('modalTitle').textContent=s.name;
+  document.getElementById('modalSub').textContent=s.subtitle;
+  document.getElementById('modalList').innerHTML=s.details.map(d=>`<li>${d}</li>`).join('');
+  document.getElementById('serviceModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('serviceModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('serviceModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+// ══════════════════ PDF MODAL ══════════════════
+function openPdfModal(id){
+  event.stopPropagation();
+  activePkg=id;
+  const today=new Date();
+  const months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  document.getElementById('clientDate').value=`${today.getDate()} ${months[today.getMonth()]} ${today.getFullYear()}`;
+  document.getElementById('pdfModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closePdfModal(){
+  document.getElementById('pdfModal').classList.remove('open');
+  document.body.style.overflow='';
+  activePkg=null;
+}
+document.getElementById('pdfModal').addEventListener('click',function(e){if(e.target===this)closePdfModal();});
+
+// ══════════════════ PDF CANVAS DRAWING ══════════════════
+const C={
+  bg:'#ffffff', bg2:'#f8f7f5', bg3:'#f1efec',
+  card:'#ffffff', card2:'#fafaf8',
+  text:'#1a1a1a', mid:'#555', gray:'#888', light:'#bbb',
+  orange:'#f15a25', pink:'#ec2159',
+  div:'rgba(0,0,0,0.09)',
+};
+
+function wrapTxt(ctx,text,maxW){
+  const words=text.split(' ');
+  const lines=[];let cur='';
+  for(const w of words){
+    const t=cur?cur+' '+w:w;
+    if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;}else cur=t;
+  }
+  if(cur)lines.push(cur);
+  return lines;
+}
+
+function rr(ctx,x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();
+}
+
+function drawPdf(ctx,pkg,cName,cCompany,cDate,sName,sPhone,sEmail,PW,S,measure){
+  const ML=40*S,MR=PW*S-40*S,IW=MR-ML;
+  let y=0;
+  const f=(sz,w)=>{ctx.font=`${w||'normal'} ${sz*S}px Arial,sans-serif`;};
+
+  // BG
+  if(!measure){ctx.fillStyle=C.bg;ctx.fillRect(0,0,PW*S,10000*S);}
+
+  // TOP BAR
+  if(!measure){
+    const g=ctx.createLinearGradient(0,0,PW*S,0);
+    g.addColorStop(0,C.orange);g.addColorStop(1,C.pink);
+    ctx.fillStyle=g;ctx.fillRect(0,y,PW*S,7*S);
+  }
+  y+=7*S;
+
+  // ── HEADER ──
+  y+=28*S;
+  if(!measure){
+    // Logo rounded rect
+    const lg=ctx.createLinearGradient(ML,y-22*S,ML+56*S,y+12*S);
+    lg.addColorStop(0,C.orange);lg.addColorStop(1,C.pink);
+    ctx.fillStyle=lg;rr(ctx,ML,y-22*S,56*S,30*S,8*S);ctx.fill();
+    ctx.fillStyle='#fff';f(11,'700');ctx.textAlign='center';
+    ctx.fillText('الأهلي',ML+28*S,y-4*S);ctx.textAlign='start';
+
+    ctx.fillStyle=C.orange;f(15,'700');
+    ctx.fillText('الأهلي للتسويق الإلكتروني',ML+64*S,y-6*S);
+    ctx.fillStyle=C.gray;f(9);
+    ctx.fillText('www.al-ahlyagency.com  |  الرياض، حي السويدياء، شارع صيدا',ML+64*S,y+8*S);
+
+    // Date right
+    ctx.textAlign='end';ctx.fillStyle=C.gray;f(9);
+    ctx.fillText(cDate,MR,y-6*S);ctx.textAlign='start';
+  }
+  y+=20*S;
+
+  // separator
+  if(!measure){ctx.strokeStyle=C.div;ctx.lineWidth=1*S;ctx.beginPath();ctx.moveTo(ML,y);ctx.lineTo(MR,y);ctx.stroke();}
+  y+=16*S;
+
+  // ── INFO ROW: CLIENT + SALES REP ──
+  const infoH=66*S;
+  if(!measure){
+    const clientW=IW*0.54, salesW=IW*0.43;
+
+    // Client card
+    ctx.fillStyle=C.bg2;rr(ctx,ML,y,clientW,infoH,10*S);ctx.fill();
+    ctx.strokeStyle='rgba(241,90,37,0.18)';ctx.lineWidth=1*S;rr(ctx,ML,y,clientW,infoH,10*S);ctx.stroke();
+    const ag=ctx.createLinearGradient(ML,y,ML,y+infoH);
+    ag.addColorStop(0,C.orange);ag.addColorStop(1,C.pink);
+    ctx.fillStyle=ag;ctx.fillRect(ML,y,3*S,infoH);
+
+    ctx.fillStyle=C.orange;f(8,'700');ctx.fillText('مُقدَّم إلى',ML+12*S,y+15*S);
+    ctx.fillStyle=C.text;f(13,'700');ctx.fillText(cName,ML+12*S,y+30*S);
+    if(cCompany){ctx.fillStyle=C.mid;f(10);ctx.fillText(cCompany,ML+12*S,y+46*S);}
+
+    // Sales card
+    const sx=MR-salesW;
+    ctx.fillStyle=C.bg2;rr(ctx,sx,y,salesW,infoH,10*S);ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,0.07)';ctx.lineWidth=1*S;rr(ctx,sx,y,salesW,infoH,10*S);ctx.stroke();
+    const sg=ctx.createLinearGradient(sx,y,sx,y+infoH);
+    sg.addColorStop(0,C.orange);sg.addColorStop(1,C.pink);
+    ctx.fillStyle=sg;ctx.fillRect(sx,y,3*S,infoH);
+
+    ctx.fillStyle=C.orange;f(8,'700');ctx.fillText('مطور الأعمال',sx+12*S,y+15*S);
+    ctx.fillStyle=C.text;f(11,'700');ctx.fillText(sName||'—',sx+12*S,y+29*S);
+    if(sPhone){ctx.fillStyle=C.mid;f(9);ctx.fillText(sPhone,sx+12*S,y+43*S);}
+    if(sEmail){ctx.fillStyle=C.gray;f(8);ctx.fillText(sEmail,sx+12*S,y+56*S);}
+  }
+  y+=infoH+18*S;
+
+  // ── PKG CARD ──
+  const pkgH=74*S;
+  if(!measure){
+    const pbg=ctx.createLinearGradient(ML,y,MR,y+pkgH);
+    pbg.addColorStop(0,'rgba(241,90,37,0.08)');pbg.addColorStop(1,'rgba(236,33,89,0.08)');
+    ctx.fillStyle=pbg;rr(ctx,ML,y,IW,pkgH,13*S);ctx.fill();
+    ctx.strokeStyle='rgba(241,90,37,0.28)';ctx.lineWidth=1*S;rr(ctx,ML,y,IW,pkgH,13*S);ctx.stroke();
+
+    // RIGHT: pkg name (Arabic RTL — drawn from right edge leftward)
+    ctx.textAlign='end';
+    ctx.fillStyle=C.orange;f(18,'700');ctx.fillText(pkg.name,MR-18*S,y+28*S);
+    ctx.fillStyle=C.gray;f(10);ctx.fillText(pkg.dur,MR-18*S,y+42*S);
+    // save badge
+    f(9,'600');
+    const sv='وفّر '+savingAmt(pkg)+' ريال';
+    const bw=ctx.measureText(sv).width+22*S;
+    ctx.fillStyle='rgba(241,90,37,0.14)';rr(ctx,MR-18*S-bw,y+49*S,bw,17*S,8*S);ctx.fill();
+    ctx.fillStyle=C.orange;ctx.textAlign='center';
+    ctx.fillText(sv,MR-18*S-bw/2,y+61*S);ctx.textAlign='start';
+
+    // LEFT: price
+    ctx.fillStyle=C.orange;f(22,'700');ctx.fillText(pkg.price+' SAR',ML+18*S,y+30*S);
+    ctx.fillStyle=C.light;f(10);
+    const oldW=ctx.measureText(pkg.old+' SAR').width;
+    ctx.fillText(pkg.old+' SAR',ML+18*S,y+46*S);
+    ctx.strokeStyle=C.light;ctx.lineWidth=1*S;
+    ctx.beginPath();ctx.moveTo(ML+18*S,y+42*S);ctx.lineTo(ML+18*S+oldW,y+42*S);ctx.stroke();
+  }
+  y+=pkgH+18*S;
+
+  // ── SECTION LABEL ──
+  if(!measure){
+    ctx.fillStyle='rgba(241,90,37,0.55)';f(8,'700');
+    ctx.fillText('الخدمات المشمولة',ML,y);
+    ctx.strokeStyle=C.div;ctx.lineWidth=0.6*S;
+    ctx.beginPath();ctx.moveTo(ML+138*S,y-3*S);ctx.lineTo(MR,y-3*S);ctx.stroke();
+  }
+  y+=14*S;
+
+  // ── SERVICES ──
+  pkg.svcs.forEach(sk=>{
+    const svc=SERVICES[sk];
+    const sbH=30*S;
+    if(!measure){
+      ctx.fillStyle=C.bg2;rr(ctx,ML,y,IW,sbH,8*S);ctx.fill();
+      ctx.strokeStyle='rgba(241,90,37,0.22)';ctx.lineWidth=0.8*S;rr(ctx,ML,y,IW,sbH,8*S);ctx.stroke();
+      const sag=ctx.createLinearGradient(ML,y,ML,y+sbH);
+      sag.addColorStop(0,C.orange);sag.addColorStop(1,C.pink);
+      ctx.fillStyle=sag;rr(ctx,ML,y,3*S,sbH,2*S);ctx.fill();
+
+      ctx.fillStyle=C.orange;f(10,'700');ctx.fillText(svc.name,ML+12*S,y+19*S);
+      ctx.textAlign='end';ctx.fillStyle=C.gray;f(8);ctx.fillText(svc.subtitle,MR-10*S,y+19*S);ctx.textAlign='start';
+    }
+    y+=sbH+8*S;
+
+    svc.details.forEach(det=>{
+      f(9);const lines=wrapTxt(ctx,det,IW-24*S);
+      const ih=(lines.length*12+5)*S;
+      if(!measure){
+        const dg=ctx.createRadialGradient(ML+8*S,y+4*S,0,ML+8*S,y+4*S,4*S);
+        dg.addColorStop(0,C.orange);dg.addColorStop(1,C.pink);
+        ctx.fillStyle=dg;ctx.beginPath();ctx.arc(ML+8*S,y+4*S,3*S,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle=C.mid;f(9);
+        lines.forEach((l,li)=>ctx.fillText(l,ML+18*S,y+(li*12+8)*S));
+      }
+      y+=ih;
+    });
+    y+=10*S;
+  });
+
+  // ── RESULT ──
+  f(9);const rl=wrapTxt(ctx,pkg.result,IW-38*S);
+  const rh=(rl.length*13+26)*S;
+  if(!measure){
+    ctx.fillStyle='rgba(241,90,37,0.07)';rr(ctx,ML,y,IW,rh,10*S);ctx.fill();
+    ctx.strokeStyle='rgba(241,90,37,0.2)';ctx.lineWidth=0.8*S;rr(ctx,ML,y,IW,rh,10*S);ctx.stroke();
+    ctx.fillStyle=C.orange;f(8,'700');ctx.fillText('النتيجة المتوقعة',ML+12*S,y+14*S);
+    ctx.fillStyle=C.mid;f(10);rl.forEach((l,li)=>ctx.fillText(l,ML+12*S,y+(li*13+26)*S));
+  }
+  y+=rh+20*S;
+
+  // ── FOOTER ──
+  if(!measure){
+    ctx.strokeStyle=C.div;ctx.lineWidth=1*S;
+    ctx.beginPath();ctx.moveTo(ML,y);ctx.lineTo(MR,y);ctx.stroke();
+    y+=13*S;
+    ctx.fillStyle=C.light;f(8);
+    ctx.fillText('الأهلي للتسويق الإلكتروني  |  الرياض، حي السويدياء، شارع صيدا  |  www.al-ahlyagency.com',ML,y);
+    ctx.textAlign='end';ctx.fillText('عرض سري – خاص بالعميل',MR,y);ctx.textAlign='start';
+    y+=16*S;
+    const fb=ctx.createLinearGradient(0,0,PW*S,0);
+    fb.addColorStop(0,C.orange);fb.addColorStop(1,C.pink);
+    ctx.fillStyle=fb;ctx.fillRect(0,y,PW*S,4*S);
+  }
+  y+=22*S;
+  return y;
+}
+
+async function generatePDF(){
+  const cName    = document.getElementById('clientName').value.trim()||'العميل الكريم';
+  const cCompany = document.getElementById('clientCompany').value.trim();
+  const cDate    = document.getElementById('clientDate').value.trim();
+  const sName    = document.getElementById('salesName').value.trim();
+  const sPhone   = document.getElementById('salesPhone').value.trim();
+  const sEmail   = document.getElementById('salesEmail').value.trim();
+  const pkg=PACKAGES.find(p=>p.id===activePkg);
+  if(!pkg)return;
+
+  const btn=document.getElementById('genBtn');
+  btn.disabled=true;btn.classList.add('loading');
+  btn.querySelector('.btn-label').textContent='جاري التوليد...';
+
+  try{
+    await new Promise(r=>setTimeout(r,30));
+    const PW=794,PH=1123,S=2;
+
+    // Measure height
+    const mc=document.createElement('canvas');
+    mc.width=PW*S;mc.height=10000*S;
+    const mCtx=mc.getContext('2d');
+    mCtx.font=`normal ${9*S}px Arial,sans-serif`;
+    const totalH=drawPdf(mCtx,pkg,cName,cCompany,cDate,sName,sPhone,sEmail,PW,S,true);
+
+    const pages=Math.ceil(totalH/(PH*S));
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+
+    for(let p=0;p<pages;p++){
+      if(p>0)pdf.addPage();
+      const c=document.createElement('canvas');
+      c.width=PW*S;c.height=PH*S;
+      const ctx=c.getContext('2d');
+      ctx.save();ctx.rect(0,0,c.width,c.height);ctx.clip();
+      ctx.translate(0,-(p*PH*S));
+      drawPdf(ctx,pkg,cName,cCompany,cDate,sName,sPhone,sEmail,PW,S,false);
+      ctx.restore();
+      pdf.addImage(c.toDataURL('image/jpeg',0.96),'JPEG',0,0,210,297);
+    }
+
+    const fn=`عرض_سعر_${pkg.name.replace(/\s+/g,'_')}_${cName.replace(/\s+/g,'_')}.pdf`;
+    pdf.save(fn);
+    closePdfModal();
+  }catch(e){
+    console.error(e);
+    alert('حدث خطأ: '+e.message);
+  }finally{
+    btn.disabled=false;btn.classList.remove('loading');
+    btn.querySelector('.btn-label').textContent='توليد PDF';
+  }
+}
+
+// ══════════════════ INIT ══════════════════
+renderPackages();
+</script>
+</body>
+</html>
