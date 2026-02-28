@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>باقات التسويق الرقمي</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root {
+    --orange: #f15a25;
+    --pink: #ec2159;
+    --white: #ffffff;
+    --grad: linear-gradient(135deg, #f15a25 0%, #ec2159 100%);
+    --grad-soft: linear-gradient(135deg, rgba(241,90,37,0.08) 0%, rgba(236,33,89,0.08) 100%);
+    --dark: #0d0d0d;
+    --card-bg: #111111;
+    --border: rgba(241,90,37,0.18);
+    --text-muted: rgba(255,255,255,0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    background: #080808;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── BG NOISE + GLOW ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(241,90,37,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 110%, rgba(236,33,89,0.18) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HEADER ─── */
+  .site-header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 20px 40px;
+  }
+
+  .logo-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px; height: 72px;
+    border-radius: 20px;
+    background: var(--grad);
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    box-shadow: 0 0 40px rgba(241,90,37,0.5), 0 0 80px rgba(236,33,89,0.3);
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%,100% { box-shadow: 0 0 40px rgba(241,90,37,0.5), 0 0 80px rgba(236,33,89,0.3); }
+    50% { box-shadow: 0 0 60px rgba(241,90,37,0.8), 0 0 120px rgba(236,33,89,0.5); }
+  }
+
+  .site-header h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 700;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .site-header p {
+    color: var(--text-muted);
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  /* ─── NAV DOTS ─── */
+  .pkg-nav {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pkg-nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all .3s;
+    border: none;
+    padding: 0;
+  }
+
+  .pkg-nav-dot.active, .pkg-nav-dot:hover {
+    background: var(--orange);
+    transform: scale(1.5);
+    box-shadow: 0 0 10px rgba(241,90,37,0.8);
+  }
+
+  /* ─── MAIN CONTAINER ─── */
+  .main {
+    position: relative;
+    z-index: 5;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  /* ─── PACKAGE SECTION ─── */
+  .pkg-section {
+    margin-bottom: 24px;
+    border-radius: 28px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color .3s, box-shadow .3s;
+    position: relative;
+  }
+
+  .pkg-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    background: var(--grad-soft);
+    opacity: 0;
+    transition: opacity .3s;
+    pointer-events: none;
+  }
+
+  .pkg-section:hover {
+    border-color: rgba(241,90,37,0.45);
+    box-shadow: 0 8px 60px rgba(241,90,37,0.12);
+  }
+
+  .pkg-section:hover::before { opacity: 1; }
+
+  /* ─── PKG HEADER ─── */
+  .pkg-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32px 36px;
+    cursor: pointer;
+    position: relative;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .pkg-header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .pkg-badge {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: var(--grad);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(241,90,37,0.4);
+  }
+
+  .pkg-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .pkg-duration {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .pkg-pricing {
+    text-align: left;
+  }
+
+  .pkg-price-new {
+    font-size: 28px;
+    font-weight: 700;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .pkg-price-old {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    direction: ltr;
+  }
+
+  .pkg-savings {
+    display: inline-block;
+    background: rgba(241,90,37,0.15);
+    border: 1px solid rgba(241,90,37,0.3);
+    color: var(--orange);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 4px;
+  }
+
+  .pkg-arrow {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .3s;
+    color: var(--text-muted);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .pkg-section.open .pkg-arrow {
+    background: var(--grad);
+    border-color: transparent;
+    color: #fff;
+    transform: rotate(180deg);
+  }
+
+  /* ─── SERVICES LIST ─── */
+  .pkg-services {
+    display: none;
+    padding: 0 36px 32px;
+    animation: fadeSlide .35s ease;
+  }
+
+  .pkg-section.open .pkg-services { display: block; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .service-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: all .25s;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .service-chip:hover {
+    background: rgba(241,90,37,0.1);
+    border-color: rgba(241,90,37,0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(241,90,37,0.15);
+  }
+
+  .service-chip .chip-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--grad);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .service-chip .chip-arrow {
+    margin-right: auto;
+    margin-left: 0;
+    color: var(--text-muted);
+    font-size: 10px;
+    transition: color .2s;
+  }
+
+  .service-chip:hover .chip-arrow { color: var(--orange); }
+
+  /* ─── SERVICE DETAIL MODAL ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal-box {
+    background: #111;
+    border: 1px solid rgba(241,90,37,0.3);
+    border-radius: 28px;
+    padding: 40px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 0 80px rgba(241,90,37,0.2);
+    animation: modalIn .3s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s;
+  }
+
+  .modal-close:hover { background: rgba(241,90,37,0.15); color: var(--orange); }
+
+  .modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .modal-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+
+  .detail-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .detail-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .detail-list li::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--grad);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ─── RESULT BAR ─── */
+  .pkg-result {
+    margin-top: 16px;
+    padding: 16px 20px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(241,90,37,0.12), rgba(236,33,89,0.12));
+    border: 1px solid rgba(241,90,37,0.2);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* ─── PRINT BUTTON ─── */
+  .print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 14px;
+    background: var(--grad);
+    border: none;
+    color: #fff;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .25s;
+    margin-top: 16px;
+    box-shadow: 0 4px 20px rgba(241,90,37,0.35);
+  }
+
+  .print-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(241,90,37,0.5);
+  }
+
+  /* ─── PDF MODAL ─── */
+  .pdf-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+  }
+
+  .pdf-modal-overlay.open { display: flex; }
+
+  .pdf-modal-box {
+    background: #111;
+    border: 1px solid rgba(241,90,37,0.35);
+    border-radius: 28px;
+    padding: 44px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 0 100px rgba(241,90,37,0.25);
+    animation: modalIn .3s ease;
+  }
+
+  .pdf-modal-box h2 {
+    font-size: 22px;
+    font-weight: 700;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .pdf-modal-box p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  .pdf-field {
+    margin-bottom: 16px;
+  }
+
+  .pdf-field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 8px;
+  }
+
+  .pdf-field input {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  .pdf-field input:focus {
+    border-color: rgba(241,90,37,0.5);
+    background: rgba(241,90,37,0.06);
+  }
+
+  .pdf-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .btn-cancel {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-muted);
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .btn-cancel:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+  .btn-generate {
+    flex: 2;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--grad);
+    border: none;
+    color: #fff;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .25s;
+    box-shadow: 0 4px 20px rgba(241,90,37,0.35);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-generate:hover:not(:disabled) { box-shadow: 0 8px 30px rgba(241,90,37,0.5); transform: translateY(-1px); }
+  .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+  .btn-generate .spinner {
+    display: none;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .btn-generate.loading .spinner { display: inline-block; }
+  .btn-generate.loading .btn-label { opacity: 0.7; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── DIVIDER ─── */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(241,90,37,0.3), rgba(236,33,89,0.3), transparent);
+    margin: 8px 36px;
+  }
+
+  /* ─── SCROLL INDICATOR ─── */
+  .scroll-hint {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media(max-width:600px) {
+    .pkg-header { padding: 24px 20px; }
+    .pkg-services { padding: 0 20px 24px; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .pkg-nav { display: none; }
+    .modal-box { padding: 28px 20px; }
+    .pdf-modal-box { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav class="pkg-nav" id="pkgNav"></nav>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo-mark">✦</div>
+  <h1>باقات التسويق الرقمي</h1>
+  <p>اختر الباقة المناسبة وانطلق نحو النتائج</p>
+</header>
+
+<div class="main" id="mainContent">
+  <p class="scroll-hint">▼ اضغط على أي باقة لعرض تفاصيلها</p>
+</div>
+
+<!-- SERVICE DETAIL MODAL -->
+<div class="modal-overlay" id="serviceModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-subtitle" id="modalSubtitle"></div>
+    <ul class="detail-list" id="modalList"></ul>
+  </div>
+</div>
+
+<!-- PDF MODAL -->
+<div class="pdf-modal-overlay" id="pdfModal">
+  <div class="pdf-modal-box">
+    <h2>📄 تصدير PDF</h2>
+    <p>أدخل بيانات العميل وسيتم تضمينها في ملف PDF الاحترافي</p>
+    <div class="pdf-field">
+      <label>اسم العميل</label>
+      <input type="text" id="clientName" placeholder="مثال: محمد العمري" />
+    </div>
+    <div class="pdf-field">
+      <label>اسم الشركة / المشروع (اختياري)</label>
+      <input type="text" id="clientCompany" placeholder="مثال: شركة النجاح للتجارة" />
+    </div>
+    <div class="pdf-field">
+      <label>التاريخ</label>
+      <input type="text" id="clientDate" placeholder="مثال: 28 فبراير 2026" />
+    </div>
+    <div class="pdf-btns">
+      <button class="btn-cancel" onclick="closePdfModal()">إلغاء</button>
+      <button class="btn-generate" id="generateBtn" onclick="generatePDF()"><span class="btn-label">⬇ توليد PDF</span><span class="spinner"></span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════
+const SERVICES = {
+  "social": {
+    icon: "📱",
+    name: "Social Media Management",
+    subtitle: "إدارة منصات التواصل الاجتماعي بالكامل",
+    details: [
+      "تصميم ونشر محتوى بصري ونصي جذاب يعكس هوية العلامة التجارية",
+      "التخطيط الاستراتيجي وجدولة المنشورات بشكل منتظم ومدروس",
+      "إدارة الرسائل والتعليقات والتفاعل مع الجمهور في الوقت المناسب",
+      "تحليل الأداء وتقديم تقارير شهرية مفصلة بالأرقام والمؤشرات",
+      "بناء مجتمع متفاعل حول العلامة التجارية عبر المنصات المختلفة",
+      "تطوير استراتيجية محتوى تتناسب مع جمهورك المستهدف",
+      "إنشاء تقويم محتوى شهري منسجم مع المناسبات والمواسم"
+    ]
+  },
+  "media": {
+    icon: "🎯",
+    name: "Media Buying",
+    subtitle: "إدارة الحملات الإعلانية المدفوعة",
+    details: [
+      "تخطيط الحملات الإعلانية وتحديد الأهداف القابلة للقياس",
+      "تحديد الجمهور المستهدف بدقة عالية باستخدام أدوات الاستهداف المتقدمة",
+      "تصميم إعلانات بصرية ونصية جذابة وفعّالة لتحقيق أعلى تفاعل",
+      "إدارة الميزانية الإعلانية بكفاءة لتحقيق أفضل عائد على الاستثمار (ROI)",
+      "متابعة الأداء اليومي والتحسين المستمر للحملات القائمة",
+      "اختبار A/B للإعلانات لاختيار الأنسب وتحقيق نتائج أفضل",
+      "تقارير تفصيلية دورية عن أداء الحملات وتوصيات للتطوير"
+    ]
+  },
+  "seo": {
+    icon: "🔍",
+    name: "SEO",
+    subtitle: "تحسين محركات البحث",
+    details: [
+      "تحليل الكلمات المفتاحية الأكثر فاعلية في مجال عملك",
+      "تحسين المحتوى النصي والوصفي ليتوافق مع معايير محركات البحث",
+      "تحسين البنية التقنية للموقع (سرعة التحميل، الروابط، الخرائط)",
+      "بناء روابط خارجية آمنة وعالية الجودة من مصادر موثوقة",
+      "تحسين الموقع للظهور في نتائج البحث المحلي",
+      "تقارير دورية عن الترتيب في محركات البحث ومعدل الزيارات",
+      "متابعة التحديثات الخوارزمية لجوجل والتكيف معها فورياً"
+    ]
+  },
+  "web": {
+    icon: "💻",
+    name: "Website Management",
+    subtitle: "إدارة وتطوير الموقع الإلكتروني",
+    details: [
+      "تحسين تجربة المستخدم (UX) لجعل الموقع سهل التصفح والاستخدام",
+      "تطوير الواجهة البصرية (UI) لتعكس هوية العلامة التجارية باحترافية",
+      "ضمان توافق الموقع مع جميع الأجهزة (موبايل، تابلت، كمبيوتر)",
+      "تحديث المحتوى والصور والمنتجات بشكل منتظم ودقيق",
+      "متابعة أداء الموقع وحل المشكلات التقنية فور ظهورها",
+      "النسخ الاحتياطي الدوري وحماية الموقع من الاختراقات",
+      "تحليل سلوك الزوار وتقديم توصيات لتحسين رحلة المستخدم"
+    ]
+  },
+  "cro": {
+    icon: "📈",
+    name: "CRO",
+    subtitle: "تحسين معدل التحويل",
+    details: [
+      "تحليل سلوك الزوار داخل الموقع باستخدام خرائط الحرارة والتسجيلات",
+      "تحديد نقاط الضعف في مسار التحويل وتقديم حلول فعّالة",
+      "اختبار A/B للصفحات والعناصر للوصول إلى أفضل أداء",
+      "تحسين صفحات الهبوط (Landing Pages) لتحقيق أعلى معدل تحويل",
+      "تحسين عملية الشراء والدفع لتقليل معدل التخلي عن السلة",
+      "تحليل مسار العميل من الزيارة حتى الشراء وتحسين كل خطوة",
+      "رفع نسبة التحويل من زوار إلى عملاء فعليين بطريقة مثبتة"
+    ]
+  },
+  "payment": {
+    icon: "💳",
+    name: "بوابات الدفع",
+    subtitle: "تفعيل وإعداد بوابات الدفع الإلكتروني",
+    details: [
+      "تفعيل وربط بوابة مدى (بطاقات البنوك السعودية)",
+      "إعداد وتفعيل STC Pay للدفع السريع عبر الجوال",
+      "ربط Apple Pay لتجربة دفع سلسة على أجهزة Apple",
+      "تفعيل PayPal لاستقبال المدفوعات الدولية",
+      "إعداد Visa و MasterCard لقبول البطاقات العالمية",
+      "ضبط إعدادات الدفع والتأكد من عمل كل البوابات بكفاءة",
+      "تأمين الموقع بشهادة SSL وضمان الامتثال لمعايير PCI"
+    ]
+  },
+  "branding": {
+    icon: "✨",
+    name: "الهوية البصرية",
+    subtitle: "بناء هوية بصرية متكاملة واحترافية",
+    details: [
+      "تصميم الشعار بثلاث نسخ: رمزي، نصي، ومختصر",
+      "اختيار نظام الألوان المناسب الذي يعكس قيم العلامة التجارية",
+      "تحديد الخطوط (Typography) وإرشادات استخدامها",
+      "تصميم Moodboard يجسّد هوية العلامة وأسلوبها البصري",
+      "إعداد Brand Guidelines دليل متكامل لاستخدام الهوية",
+      "تحليل السوق والمنافسين لتحديد مكانة مميزة",
+      "صياغة الرؤية والرسالة والقيم الجوهرية للعلامة",
+      "تحديد Voice & Tone صوت العلامة وأسلوب التواصل",
+      "استراتيجية التمركز (Positioning) في السوق",
+      "تصميم المطبوعات: بطاقات عمل، أوراق رسمية، أظرف",
+      "Brand Storytelling صياغة قصة العلامة التجارية",
+      "تصميم تجربة العميل عبر نقاط التواصل المختلفة",
+      "تصميم التغليف (Packaging) إن وجد"
+    ]
+  }
+};
+
+const PACKAGES = [
+  {
+    id: "launch",
+    icon: "🚀",
+    name: "باقة الانطلاقة",
+    price: "2,850",
+    oldPrice: "3,400",
+    duration: "30 يوم",
+    result: "زيادة المبيعات – رفع الوعي – نتائج قابلة للقياس بأقل تكلفة",
+    services: ["social", "media", "seo", "web", "cro"]
+  },
+  {
+    id: "profit",
+    icon: "💰",
+    name: "باقة الربح",
+    price: "5,300",
+    oldPrice: "6,800",
+    duration: "شهر فل باكدج – شهرين ميديا",
+    result: "تركيز أكبر على بناء حضور قوي وتحقيق مبيعات مستقرة",
+    services: ["social", "media", "seo", "web", "cro"]
+  },
+  {
+    id: "top",
+    icon: "👑",
+    name: "باقة القمة",
+    price: "6,900",
+    oldPrice: "10,100",
+    duration: "90 يوم – جميع الخدمات",
+    result: "مثالية للشركات اللي تبغى نتائج واضحة خلال ربع سنة",
+    services: ["social", "media", "seo", "web", "cro"]
+  },
+  {
+    id: "excellence",
+    icon: "⭐",
+    name: "باقة التميز",
+    price: "12,800",
+    oldPrice: "19,400",
+    duration: "180 يوم",
+    result: "مناسبة للعلامات التجارية اللي تبغى توسع حصتها السوقية",
+    services: ["social", "media", "seo", "web", "cro"]
+  },
+  {
+    id: "elite",
+    icon: "💎",
+    name: "باقة النخبة",
+    price: "22,000",
+    oldPrice: "25,200",
+    duration: "360 يوم",
+    result: "بناء علامة تجارية قوية ومستقرة على مدار العام",
+    services: ["social", "media", "seo", "web", "cro"]
+  },
+  {
+    id: "brand",
+    icon: "🎨",
+    name: "باقة الهوية البصرية",
+    price: "2,000",
+    oldPrice: "3,500",
+    duration: "خدمة متكاملة",
+    result: "هوية بصرية احترافية تميزك في السوق",
+    services: ["branding"]
+  },
+  {
+    id: "webpkg",
+    icon: "🌐",
+    name: "باقة تحسين الموقع",
+    price: "1,800",
+    oldPrice: "2,200",
+    duration: "خدمة متكاملة",
+    result: "موقع سريع آمن ومحوّل مع بوابات دفع متكاملة",
+    services: ["web", "cro", "payment"]
+  }
+];
+
+// ══════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════
+let activePdfPkg = null;
+
+function savingsAmount(oldPrice, newPrice) {
+  const o = parseInt(oldPrice.replace(/,/g,''));
+  const n = parseInt(newPrice.replace(/,/g,''));
+  return (o - n).toLocaleString('ar');
+}
+
+function renderPackages() {
+  const container = document.getElementById('mainContent');
+  const nav = document.getElementById('pkgNav');
+
+  PACKAGES.forEach((pkg, i) => {
+    // nav dot
+    const dot = document.createElement('button');
+    dot.className = 'pkg-nav-dot';
+    dot.title = pkg.name;
+    dot.dataset.index = i;
+    dot.onclick = () => {
+      document.getElementById('pkg-' + pkg.id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+    nav.appendChild(dot);
+
+    // section
+    const sec = document.createElement('div');
+    sec.className = 'pkg-section';
+    sec.id = 'pkg-' + pkg.id;
+
+    const saving = savingsAmount(pkg.oldPrice, pkg.price);
+
+    sec.innerHTML = `
+      <div class="pkg-header" onclick="togglePkg('${pkg.id}')">
+        <div class="pkg-header-right">
+          <div class="pkg-badge">${pkg.icon}</div>
+          <div>
+            <div class="pkg-name">${pkg.name}</div>
+            <div class="pkg-duration">📅 ${pkg.duration}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div class="pkg-pricing">
+            <div class="pkg-price-new">${pkg.price} ريال</div>
+            <div class="pkg-price-old">${pkg.oldPrice} ريال</div>
+            <div class="pkg-savings">وفّر ${saving} ريال</div>
+          </div>
+          <div class="pkg-arrow">▼</div>
+        </div>
+      </div>
+
+      <div class="pkg-services" id="services-${pkg.id}">
+        <div class="section-divider"></div>
+        <div style="padding-top:20px;">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;font-weight:500;">الخدمات المشمولة – اضغط لتفاصيل كل خدمة</div>
+          <div class="services-grid">
+            ${pkg.services.map(s => `
+              <div class="service-chip" onclick="openModal('${s}','${pkg.id}')">
+                <div class="chip-icon">${SERVICES[s].icon}</div>
+                <span>${SERVICES[s].name}</span>
+                <span class="chip-arrow">◄</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="pkg-result">🎯 ${pkg.result}</div>
+          <button class="print-btn" onclick="openPdfModal('${pkg.id}')">📄 تصدير PDF للعميل</button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(sec);
+  });
+
+  // nav scroll watcher
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        const id = entry.target.id.replace('pkg-','');
+        const idx = PACKAGES.findIndex(p => p.id === id);
+        document.querySelectorAll('.pkg-nav-dot').forEach((d,i) => {
+          d.classList.toggle('active', i === idx);
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+
+  PACKAGES.forEach(pkg => {
+    const el = document.getElementById('pkg-' + pkg.id);
+    if(el) observer.observe(el);
+  });
+}
+
+function togglePkg(id) {
+  const sec = document.getElementById('pkg-' + id).closest
+    ? document.getElementById('pkg-' + id) : null;
+  const el = document.getElementById('pkg-' + id);
+  el.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════
+function openModal(serviceKey, pkgId) {
+  event.stopPropagation();
+  const svc = SERVICES[serviceKey];
+  document.getElementById('modalTitle').textContent = svc.name;
+  document.getElementById('modalSubtitle').textContent = svc.subtitle;
+  const list = document.getElementById('modalList');
+  list.innerHTML = svc.details.map(d => `<li>${d}</li>`).join('');
+  document.getElementById('serviceModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('serviceModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('serviceModal').addEventListener('click', function(e) {
+  if(e.target === this) closeModal();
+});
+
+// ══════════════════════════════════════════════
+// PDF MODAL
+// ══════════════════════════════════════════════
+function openPdfModal(pkgId) {
+  event.stopPropagation();
+  activePdfPkg = pkgId;
+  document.getElementById('pdfModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  const today = new Date();
+  const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  document.getElementById('clientDate').value = `${today.getDate()} ${months[today.getMonth()]} ${today.getFullYear()}`;
+}
+
+function closePdfModal() {
+  document.getElementById('pdfModal').classList.remove('open');
+  document.body.style.overflow = '';
+  activePdfPkg = null;
+}
+
+document.getElementById('pdfModal').addEventListener('click', function(e) {
+  if(e.target === this) closePdfModal();
+});
+
+// ══════════════════════════════════════════════
+// PDF GENERATION — Pure Canvas Drawing
+// No iframe | No html2canvas | No security blocks
+// ══════════════════════════════════════════════
+
+const SERVICE_LABELS = {
+  "social": "Social Media Management",
+  "media": "Media Buying",
+  "seo": "SEO - Search Engine Optimization",
+  "web": "Website Management",
+  "cro": "CRO - Conversion Rate Optimization",
+  "payment": "Payment Gateways",
+  "branding": "Visual Identity & Branding"
+};
+
+// Draws a rounded rectangle on canvas context
+function roundRect(ctx, x, y, w, h, r) {
+  r = Math.min(r, w/2, h/2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x + r, y + h);
+  ctx.arcTo(x, y + h, x, y + h - r, r);
+  ctx.lineTo(x, y + r);
+  ctx.arcTo(x, y, x + r, y, r);
+  ctx.closePath();
+}
+
+// Wraps text and returns array of lines
+function wrapText(ctx, text, maxWidth) {
+  const words = text.split(' ');
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    const test = current ? current + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+function buildPdfCanvas(pkg, clientName, clientCompany, clientDate) {
+  const PW = 794, PH = 1123; // A4 at 96dpi
+  const SCALE = 2;
+  const CW = PW * SCALE, CH_ESTIMATE = 3000 * SCALE;
+
+  // First pass: measure height needed
+  const measureCanvas = document.createElement('canvas');
+  measureCanvas.width = CW;
+  measureCanvas.height = CH_ESTIMATE;
+  const mCtx = measureCanvas.getContext('2d');
+  const totalH = renderPdfPage(mCtx, pkg, clientName, clientCompany, clientDate, PW, SCALE, true);
+
+  // Actual pages
+  const pageCount = Math.ceil(totalH / (PH * SCALE));
+  const canvases = [];
+
+  for (let p = 0; p < pageCount; p++) {
+    const c = document.createElement('canvas');
+    c.width = CW;
+    c.height = PH * SCALE;
+    const ctx = c.getContext('2d');
+    ctx.translate(0, -(p * PH * SCALE));
+    renderPdfPage(ctx, pkg, clientName, clientCompany, clientDate, PW, SCALE, false);
+    // clip to page
+    canvases.push(c);
+  }
+
+  return canvases;
+}
+
+function renderPdfPage(ctx, pkg, clientName, clientCompany, clientDate, PW, SCALE, measureOnly) {
+  const S = SCALE;
+  const saving = (parseInt(pkg.oldPrice.replace(/,/g,'')) - parseInt(pkg.price.replace(/,/g,''))).toLocaleString();
+
+  const ORANGE = '#f15a25';
+  const PINK   = '#ec2159';
+  const WHITE  = '#ffffff';
+  const DARK   = '#080808';
+  const CARD   = '#141414';
+  const CARD2  = '#1a1a1a';
+  const GRAY   = '#888888';
+  const LGRAY  = '#cccccc';
+  const ML = 40*S, MR = PW*S - 40*S;
+  const CW_INNER = MR - ML;
+
+  let y = 0;
+
+  function fill(color) { ctx.fillStyle = color; }
+  function stroke(color, lw) { ctx.strokeStyle = color; ctx.lineWidth = lw*S; }
+  function font(size, weight, family) {
+    ctx.font = `${weight} ${size*S}px ${family||'Arial, sans-serif'}`;
+  }
+  function text(str, x, ty, color, size, weight, maxW) {
+    if(measureOnly) return;
+    ctx.fillStyle = color;
+    font(size, weight||'normal');
+    if(maxW) {
+      const lines = wrapText(ctx, str, maxW);
+      lines.forEach((l,i) => ctx.fillText(l, x, ty + i*size*S*1.4));
+    } else {
+      ctx.fillText(str, x, ty);
+    }
+  }
+
+  // ── BACKGROUND
+  if(!measureOnly) {
+    fill(DARK); ctx.fillRect(0, y, PW*S, 8000*S);
+    // Subtle glow top-left
+    const g1 = ctx.createRadialGradient(0, 0, 0, 0, 0, 300*S);
+    g1.addColorStop(0, 'rgba(241,90,37,0.12)');
+    g1.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g1; ctx.fillRect(0, 0, PW*S, 400*S);
+    // Subtle glow bottom-right
+    const g2 = ctx.createRadialGradient(PW*S, 600*S, 0, PW*S, 600*S, 250*S);
+    g2.addColorStop(0, 'rgba(236,33,89,0.10)');
+    g2.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g2; ctx.fillRect(0, 0, PW*S, 800*S);
+  }
+
+  // ── TOP BAR gradient
+  if(!measureOnly) {
+    const grad = ctx.createLinearGradient(0,0,PW*S,0);
+    grad.addColorStop(0, ORANGE);
+    grad.addColorStop(1, PINK);
+    ctx.fillStyle = grad; ctx.fillRect(0, y, PW*S, 7*S);
+  }
+  y += 7*S;
+
+  // ── HEADER ROW
+  y += 22*S;
+  if(!measureOnly) {
+    // Logo circle
+    const logoX = MR - 26*S, logoY = y - 18*S, logoR = 22*S;
+    const logoGrad = ctx.createLinearGradient(logoX-logoR, logoY-logoR, logoX+logoR, logoY+logoR);
+    logoGrad.addColorStop(0, ORANGE);
+    logoGrad.addColorStop(1, PINK);
+    ctx.fillStyle = logoGrad;
+    ctx.beginPath(); ctx.arc(logoX, logoY, logoR, 0, Math.PI*2); ctx.fill();
+    // Logo letter
+    ctx.fillStyle = WHITE; font(16,'bold'); ctx.textAlign = 'center';
+    ctx.fillText('M', logoX, logoY + 6*S);
+    ctx.textAlign = 'start';
+
+    // Title
+    ctx.fillStyle = ORANGE; font(18,'bold');
+    ctx.fillText('Digital Marketing Proposal', ML, y);
+    ctx.fillStyle = GRAY; font(10,'normal');
+    ctx.fillText('www.yourcompany.com', ML, y + 14*S);
+  }
+  y += 30*S;
+
+  // Separator line
+  if(!measureOnly) {
+    ctx.strokeStyle = 'rgba(241,90,37,0.2)'; ctx.lineWidth = 1*S;
+    ctx.beginPath(); ctx.moveTo(ML, y); ctx.lineTo(MR, y); ctx.stroke();
+  }
+  y += 14*S;
+
+  // ── CLIENT CARD
+  const clientH = (clientCompany ? 58 : 44)*S;
+  if(!measureOnly) {
+    fill(CARD); roundRect(ctx, ML, y, CW_INNER, clientH, 10*S);
+    ctx.fill();
+    // Left accent
+    const accentGrad = ctx.createLinearGradient(ML, y, ML, y+clientH);
+    accentGrad.addColorStop(0, ORANGE); accentGrad.addColorStop(1, PINK);
+    ctx.fillStyle = accentGrad; ctx.fillRect(ML, y, 3*S, clientH);
+
+    const cx = ML + 18*S;
+    ctx.fillStyle = 'rgba(241,90,37,0.6)'; font(8,'normal');
+    ctx.fillText('PREPARED FOR', cx, y + 14*S);
+    ctx.fillStyle = WHITE; font(13,'bold');
+    ctx.fillText(clientName, cx, y + 27*S);
+    if(clientCompany) {
+      ctx.fillStyle = GRAY; font(9,'normal');
+      ctx.fillText('Company', cx, y + 40*S);
+      ctx.fillStyle = LGRAY; font(11,'normal');
+      ctx.fillText(clientCompany, cx, y + 52*S);
+    }
+    // Date
+    const dateX = MR - 10*S;
+    ctx.textAlign = 'end';
+    ctx.fillStyle = 'rgba(241,90,37,0.6)'; font(8,'normal');
+    ctx.fillText('DATE', dateX, y + 14*S);
+    ctx.fillStyle = LGRAY; font(11,'normal');
+    ctx.fillText(clientDate, dateX, y + 27*S);
+    ctx.textAlign = 'start';
+  }
+  y += clientH + 14*S;
+
+  // ── PACKAGE CARD
+  const pkgCardH = 70*S;
+  if(!measureOnly) {
+    // Background with subtle gradient
+    const pkgBg = ctx.createLinearGradient(ML, y, MR, y+pkgCardH);
+    pkgBg.addColorStop(0, 'rgba(241,90,37,0.13)');
+    pkgBg.addColorStop(1, 'rgba(236,33,89,0.13)');
+    ctx.fillStyle = pkgBg;
+    roundRect(ctx, ML, y, CW_INNER, pkgCardH, 12*S); ctx.fill();
+    // Border
+    ctx.strokeStyle = 'rgba(241,90,37,0.4)'; ctx.lineWidth = 1*S;
+    roundRect(ctx, ML, y, CW_INNER, pkgCardH, 12*S); ctx.stroke();
+
+    // Package name (right side)
+    ctx.textAlign = 'end';
+    ctx.fillStyle = ORANGE; font(18,'bold');
+    ctx.fillText(pkg.name, MR - 16*S, y + 26*S);
+    ctx.fillStyle = GRAY; font(10,'normal');
+    ctx.fillText(pkg.duration, MR - 16*S, y + 40*S);
+    // Savings badge
+    ctx.fillStyle = 'rgba(241,90,37,0.2)';
+    const badgeW = 120*S, badgeH = 16*S;
+    const bx = MR - 16*S - badgeW;
+    roundRect(ctx, bx, y + 47*S, badgeW, badgeH, 8*S); ctx.fill();
+    ctx.fillStyle = ORANGE; font(9,'600');
+    ctx.textAlign = 'center';
+    ctx.fillText('Save ' + saving + ' SAR', bx + badgeW/2, y + 58*S);
+    ctx.textAlign = 'start';
+
+    // Price (left side)
+    ctx.fillStyle = ORANGE; font(24,'bold');
+    ctx.fillText(pkg.price + ' SAR', ML + 16*S, y + 30*S);
+    ctx.fillStyle = GRAY; font(10,'normal');
+    // strikethrough
+    const oldW = ctx.measureText(pkg.oldPrice + ' SAR').width;
+    ctx.fillText(pkg.oldPrice + ' SAR', ML + 16*S, y + 46*S);
+    ctx.strokeStyle = GRAY; ctx.lineWidth = 1*S;
+    ctx.beginPath(); ctx.moveTo(ML+16*S, y+42*S); ctx.lineTo(ML+16*S+oldW, y+42*S); ctx.stroke();
+  }
+  y += pkgCardH + 18*S;
+
+  // ── SERVICES SECTION LABEL
+  if(!measureOnly) {
+    ctx.fillStyle = 'rgba(255,255,255,0.25)'; font(8,'600');
+    ctx.fillText('INCLUDED SERVICES', ML, y);
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)'; ctx.lineWidth = 0.5*S;
+    ctx.beginPath(); ctx.moveTo(ML + 140*S, y-3*S); ctx.lineTo(MR, y-3*S); ctx.stroke();
+  }
+  y += 14*S;
+
+  // ── EACH SERVICE
+  pkg.services.forEach(sKey => {
+    const svc = SERVICES[sKey];
+    const label = SERVICE_LABELS[sKey] || svc.name;
+
+    // Service header bar
+    const svcBarH = 32*S;
+    if(!measureOnly) {
+      fill(CARD2); roundRect(ctx, ML, y, CW_INNER, svcBarH, 8*S); ctx.fill();
+      ctx.strokeStyle = 'rgba(241,90,37,0.35)'; ctx.lineWidth = 0.8*S;
+      roundRect(ctx, ML, y, CW_INNER, svcBarH, 8*S); ctx.stroke();
+      // Left accent stripe
+      const sGrad = ctx.createLinearGradient(ML, y, ML, y+svcBarH);
+      sGrad.addColorStop(0, ORANGE); sGrad.addColorStop(1, PINK);
+      ctx.fillStyle = sGrad; roundRect(ctx, ML, y, 3*S, svcBarH, 1*S); ctx.fill();
+
+      ctx.fillStyle = ORANGE; font(11,'700');
+      ctx.fillText(label, ML + 14*S, y + 20*S);
+      ctx.textAlign = 'end';
+      ctx.fillStyle = GRAY; font(9,'normal');
+      ctx.fillText(svc.subtitle, MR - 12*S, y + 20*S);
+      ctx.textAlign = 'start';
+    }
+    y += svcBarH + 8*S;
+
+    // Detail items
+    svc.details.forEach(detail => {
+      font(9.5, 'normal');
+      const lines = measureOnly ? wrapText(ctx, detail, CW_INNER - 30*S) : wrapText(ctx, detail, CW_INNER - 30*S);
+      const itemH = (lines.length * 13 + 6) * S;
+
+      if(!measureOnly) {
+        // Dot
+        const dotGrad = ctx.createRadialGradient(ML+9*S, y+5*S, 0, ML+9*S, y+5*S, 4*S);
+        dotGrad.addColorStop(0, ORANGE); dotGrad.addColorStop(1, PINK);
+        ctx.fillStyle = dotGrad;
+        ctx.beginPath(); ctx.arc(ML+9*S, y+5*S, 3.5*S, 0, Math.PI*2); ctx.fill();
+
+        ctx.fillStyle = LGRAY;
+        lines.forEach((l, i) => {
+          ctx.fillText(l, ML+20*S, y + (i * 13 + 10)*S);
+        });
+      }
+      y += itemH;
+    });
+
+    y += 12*S;
+  });
+
+  // ── RESULT BOX
+  font(9.5,'normal');
+  const resultLines = wrapText(ctx, pkg.result, CW_INNER - 50*S);
+  const resultH = (resultLines.length * 14 + 28)*S;
+
+  if(!measureOnly) {
+    fill('rgba(241,90,37,0.07)');
+    roundRect(ctx, ML, y, CW_INNER, resultH, 10*S); ctx.fill();
+    ctx.strokeStyle = 'rgba(241,90,37,0.3)'; ctx.lineWidth = 0.8*S;
+    roundRect(ctx, ML, y, CW_INNER, resultH, 10*S); ctx.stroke();
+
+    ctx.fillStyle = ORANGE; font(8,'700');
+    ctx.fillText('EXPECTED RESULTS', ML+14*S, y+15*S);
+    ctx.fillStyle = LGRAY; font(10,'normal');
+    resultLines.forEach((l,i) => ctx.fillText(l, ML+14*S, y+(i*14+26)*S));
+  }
+  y += resultH + 20*S;
+
+  // ── FOOTER
+  const footerY = y + 20*S;
+  if(!measureOnly) {
+    ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fillRect(0, footerY, PW*S, 30*S);
+    // Footer gradient line
+    const fGrad = ctx.createLinearGradient(0,0,PW*S,0);
+    fGrad.addColorStop(0, ORANGE); fGrad.addColorStop(1, PINK);
+    ctx.fillStyle = fGrad; ctx.fillRect(0, footerY, PW*S, 2*S);
+    ctx.fillStyle = GRAY; font(8,'normal');
+    ctx.textAlign = 'center';
+    ctx.fillText('Confidential — Digital Marketing Proposal', PW*S/2, footerY+18*S);
+    ctx.textAlign = 'end';
+    ctx.fillText(clientName + '  |  ' + clientDate, MR, footerY+18*S);
+    ctx.textAlign = 'start';
+  }
+  y += 50*S;
+
+  return y;
+}
+
+async function generatePDF() {
+  const clientName = document.getElementById('clientName').value.trim() || 'العميل الكريم';
+  const clientCompany = document.getElementById('clientCompany').value.trim();
+  const clientDate = document.getElementById('clientDate').value.trim();
+  const pkg = PACKAGES.find(p => p.id === activePdfPkg);
+  if (!pkg) return;
+
+  const btn = document.getElementById('generateBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  btn.querySelector('.btn-label').textContent = 'جاري التوليد...';
+
+  try {
+    // Let UI update before heavy work
+    await new Promise(r => setTimeout(r, 50));
+
+    const PW = 794, PH = 1123, SCALE = 2;
+
+    // Measure total height
+    const mCanvas = document.createElement('canvas');
+    mCanvas.width = PW * SCALE;
+    mCanvas.height = 9000 * SCALE;
+    const mCtx = mCanvas.getContext('2d');
+    mCtx.font = `normal ${9*SCALE}px Arial, sans-serif`;
+    const totalH = renderPdfPage(mCtx, pkg, clientName, clientCompany, clientDate, PW, SCALE, true);
+
+    const pageCount = Math.ceil(totalH / (PH * SCALE));
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+    for (let p = 0; p < pageCount; p++) {
+      if (p > 0) pdf.addPage();
+
+      const c = document.createElement('canvas');
+      c.width = PW * SCALE;
+      c.height = PH * SCALE;
+      const ctx = c.getContext('2d');
+
+      // Clip to page bounds
+      ctx.save();
+      ctx.rect(0, 0, c.width, c.height);
+      ctx.clip();
+
+      // Shift up by page offset
+      ctx.translate(0, -(p * PH * SCALE));
+
+      renderPdfPage(ctx, pkg, clientName, clientCompany, clientDate, PW, SCALE, false);
+      ctx.restore();
+
+      const imgData = c.toDataURL('image/jpeg', 0.96);
+      pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+    }
+
+    const safeName = clientName.replace(/\s+/g,'_');
+    const safePkg  = pkg.name.replace(/\s+/g,'_');
+    pdf.save(`${safePkg}_${safeName}.pdf`);
+
+    closePdfModal();
+  } catch (err) {
+    console.error('PDF Error:', err);
+    alert('حدث خطأ: ' + err.message);
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    btn.querySelector('.btn-label').textContent = '⬇ توليد PDF';
+  }
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+renderPackages();
+</script>
+</body>
+</html>
